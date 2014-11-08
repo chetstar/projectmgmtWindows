@@ -1,0 +1,1 @@
+uwsgi --ini /var/www/demoapp/demoapp_uwsgi.ini

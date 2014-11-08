@@ -1,0 +1,68 @@
+{% extends "baseindex.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+          {% block content %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+
+
+
+
+              <div class="col-md-12">
+           <div class="well well-lg">
+            <div class="container">
+        <h1>Restart a Computer or Server</h1>
+        <p>Clickit. Beware V4 will shut down this page temp. </h3></p>    <div class="alert">
+    <strong>Status:</strong> <h3><font color="red"><span class="result"></span></font></div><br>
+
+  {% for item in restartFiles %} 
+  {% if 'Backup' not in item and 'dummy' not in item %}
+  <div class="col-md-6">
+<div class="alert alert-success" role="alert">
+<p><a href=# name = a class="calculate" id="{{ item }}">{{ item }}</a>
+</div></div>
+ {%endif%} {%endfor%}
+ <script type=text/javascript>
+  $(function() {
+    $('a.calculate').bind('click', function() {
+       var item = $(this).attr('id');
+
+      $.getJSON($SCRIPT_ROOT + '/restartajax/'+item, {
+      }, function(data) {
+
+        $("span.result").text(data.result);
+      });
+      return false;
+    });
+  });
+</script>
+      </div>
+    </div>
+    
+</div></div>
+
+
+    
+        <!--  <a class="btn btn-primary" href="/refreshsyntax"><i class="icon-refresh icon-white"></i> Refresh your syntax file list</a> -->
+
+</div></div>
+
+  {% endblock %}
+
+
+
+
+
+
+
+<!-- /.col-sm-4 -->
