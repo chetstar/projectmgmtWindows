@@ -1,11 +1,17 @@
 {% extends "baseindex.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+
+
 <!DOCTYPE html>
 
-          {% block content %}
+          {% block head %}
+         {{ super() }}
+     
 <html lang="en">
-
+ </div></p></div></div></div></p></div></div></div>
+<br><br><br>
+    
 
           <ol class="breadcrumb">
                       <li><a href="/start">All Projects</a></li>
@@ -26,8 +32,10 @@
             {% for message in get_flashed_messages() %}
                        <span style="color: red;">[{{ message }}]</span>
 {% endfor %}
+ </div></p></div></div></div></p></div></div></div></div></div></div>
+    {% endblock %}
+          {% block content %}
 
-      </div></p></div></div></div></p></div></div></div>
         <div class="row">
         <div class="col-md-9">
 
@@ -58,16 +66,22 @@
     {{ sform.hidden_tag() }}
     {{ wtf.form_errors(sform) }}
     {{ wtf.form_field(sform.strategy) }}
-   <br>
+<br>
           </div></p></div></div>  {{ wtf.form_field(sform.submit) }}
-</form><br></b></div></div>  
+        <br>
+          </p></form></b><br></h3>
+       
             <div class="modal-footer">
-              
-               
-  </div></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               </div>
+  </div>
 </div>
       </div>
     </div>
+  </div>
+</div>
+                  </div></div></div>
+
   
 {% for item in zipit %} 
       <!-- Example row of columns -->
@@ -111,8 +125,8 @@
 
  </div> </div> </div>
             </div>
-          </div></div>
+          </div></div></div>
             {% endfor %}
-<br></b></div></div>  
+<br></b></div></div>  </div>
 
           {% endblock %}

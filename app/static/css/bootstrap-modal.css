@@ -34,7 +34,6 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
-	overflow: auto;
 }
 
 .modal {
@@ -46,7 +45,6 @@
 }
 
 .modal.fade {
-	top: -100%;
 	-webkit-transition: opacity 0.3s linear, top 0.3s ease-out, bottom 0.3s ease-out, margin-top 0.3s ease-out;	
 	   -moz-transition: opacity 0.3s linear, top 0.3s ease-out, bottom 0.3s ease-out, margin-top 0.3s ease-out;
 	     -o-transition: opacity 0.3s linear, top 0.3s ease-out, bottom 0.3s ease-out, margin-top 0.3s ease-out;
@@ -157,7 +155,10 @@
 		position: static;
 	}
 }
-
+.modal .modal-body {
+    max-height: 420px;
+    overflow-y: auto;
+}
 .loading-spinner {
 	position: absolute;
 	top: 50%;
