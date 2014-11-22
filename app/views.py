@@ -19,6 +19,13 @@ import socket
 from threading import Thread
 import sqlite3
 
+@app.route('/navstart', methods=['GET'])
+def navstart():
+    # subject = ''
+    print "it worked"
+    return render_template("navStart.html")
+
+
 @app.route('/sendemail', methods=['GET', 'POST'])
 def sendEmailV4():
     # subject = ''
@@ -238,12 +245,17 @@ def edit_task(name,goal,strategy,task):
     tform=task_form(request.values)
     if request.method == 'POST' and form.validate_on_submit():
         #if it changed from True to false, set complete date to None
+        # import pdb;pdb.set_trace()
         if get_history(ptask, 'complete')[0]==[True] and get_history(ptask, 'complete')[2]==[False]:
             print 'changed from false to true'
             ptask.completeDate=datetime.datetime.utcnow()
         if get_history(ptask, 'complete')[0]==[False] and get_history(ptask, 'complete')[2]==[True]:
             print 'changed from true to false'
             ptask.completeDate=None
+        else:
+            if get_history(ptask, 'complete')[0]==[True] and get_history(ptask, 'complete')[2]==[None]:
+                ptask.complete=True
+                ptask.completeDate=None
         db.session.commit()
         return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
     if delete_form.validate_on_submit():

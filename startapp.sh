@@ -1,3 +1,3 @@
  #!/bin/bash         
 
-uwsgi --ini /var/www/demoapp/demoapp_uwsgi.ini
+/var/www/demoapp/venv/bin/uwsgi --ini /var/www/demoapp/demoapp_uwsgi.ini

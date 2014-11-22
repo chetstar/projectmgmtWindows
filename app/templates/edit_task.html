@@ -97,7 +97,10 @@
 <input data-provide="datepicker" data-date-format="mm/dd/yyyy" id="deadline"  type="text" value="{{ form.deadline.data }}" name="deadline" required></input>
 <br><br>
 {{ wtf.form_field(form.complete) }}<br><br>
-    <input id="note" class="form-control" type="text"  name="note"  value="{{ form.note.data }}" maxlength="300"  required></input><br><br>
+  <label class="control-label" for="note">
+Note
+                        </label>
+    <input id="note" class="form-control" type="text"  name="note"  value="{{ form.note.data }}" maxlength="300"  ></input><br><br>
    <div class="row">
       <div class="col-md-1 ">
 {{ wtf.form_field(form.submit) }}</form> </div> 

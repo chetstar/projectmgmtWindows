@@ -22,7 +22,7 @@ class task_form(Form):
     staff = TextField('Staff Assigned')
     complete = BooleanField('Is the task Complete?')
     deadline =DateField( 'Deadline (mm/dd/yyyy)',  format='%m/%d/%Y',validators = [validators.Required()])
-    note = TextAreaField('Note',[validators.Required(),validators.Length(min=2, max=250,message='not the right length less than 250 characters')])
+    note = TextAreaField('Note',)
     Order = IntegerField('Order')
     submit=SubmitField('Submit')
 
