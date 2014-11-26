@@ -59,12 +59,20 @@
  <p> <a class="btn btn-default" role="button" href="http://winspssv3:5000/"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Production Results</a></p>
   <p><a class="btn btn-default" role="button" href="http://winspssv4:5000/theportal"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Data Portal</a> </p>
 <p> <a class="btn btn-default" role="button"href="http://CoveContext/RunReport.i4?reportUUID=1040e171-5c43-4129-9050-5d2fd8c909e2&primaryOrg=1&clientOrg=1&filter8663189=Katie+A+Implementation">Katie A emanio</a></p>
-
-
+      <div class="container">
+             <div class="row">
+        <div class="col-md-4 offset2">
+{{ wtf.quick_form(aform) }}
+  {% if AS ==0 %}Failed!{%endif%}
+  {%if AS==1 %} Success  {{email}} {%endif%} 
+  {% if AS ==None %}Login to nowhere{%endif%}
+<br>
       </div>
     </div>
 
-  
+     </div>
+    </div>   </div>
+    </div>
 
     
           {% endblock %}

@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, BooleanField, SubmitField, DateField,TextAreaField,SelectMultipleField,IntegerField
+from wtforms import TextField, BooleanField, SubmitField, DateField,TextAreaField,SelectMultipleField,IntegerField,PasswordField
 from wtforms import validators
 from wtforms import widgets
 
@@ -29,3 +29,9 @@ class task_form(Form):
 class DeleteRow_form(Form):
     row_id = IntegerField('')
     submitd = SubmitField('Delete')
+
+
+class ldapA(Form):
+    username = TextField('Username', [validators.Length(min=4, max=25)])
+    password = PasswordField('Password', [validators.Required()])
+    submitd = SubmitField('Login')
