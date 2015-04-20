@@ -17,7 +17,7 @@ from email.mime.text import MIMEText
 import subprocess
 import socket
 from threading import Thread
-import sqlite3
+
 
 @app.route('/navstart', methods=['GET','POST'])
 def navstart():
