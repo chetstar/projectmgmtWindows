@@ -1,6 +1,6 @@
 CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
-
+WTF_CSRF_ENABLED = True
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,6 +12,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # SQLALCHEMY_DATABASE_URI = create_engine("mssql+pyodbc://dashboarddatadev", encoding='windows-1255', convert_unicode=True)
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:3Machine@bhcsweb3/postgres'
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
+SQLALCHEMY_BINDS = {
+    'request':      'sqlite:///' + os.path.join(basedir, 'app.db')
+}
+
+
 
 # MAIL_SERVER = "allsmtp.acgov.org"
 # MAIL_PORT = 25
