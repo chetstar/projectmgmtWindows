@@ -5,8 +5,8 @@ from wtforms import TextField, BooleanField, SubmitField, DateField,TextAreaFiel
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 class Which(Form):
-    formtype = RadioField('how ready are you', choices=[('Long','General data request form (Designed to guide you request)'),
-        ('Short','Advanced (be prepared to list all of the columns in the data request)')],coerce=unicode)
+    formtype = RadioField('how ready are you', choices=[('Long','<h3>Standard data request form (Designed to guide you through your request)</h3><br>'),
+        ('Short',"<h3>Data Partner's Advanced form (<strong>be prepared to list all of the columns in the data request</strong>)</h3><br>")],coerce=unicode)
     submit=SubmitField('Submit')
 
 class LoginForm(Form):
@@ -18,32 +18,33 @@ class LoginForm(Form):
 # [validators.Required(),validators.Length(min=2, max=50)]
 class Request(Form):
     # test= QuerySelectField(query_factory=Requests.with_entities(Requests.id)) 
-    jobTitle= TextField('This will be the ID we use to communicate about the request.',validators=[validators.Required(),validators.Length(min=2, max=50)])#,
-    emanio = BooleanField('Yes, I have looked at Emanio Context <a href="http://covecontext/RunDashboard.i4?dashUUID=2e74cf96-b33b-4a7a-b53f-4310ce259dc6&primaryOrg=1&clientOrg=1">click here to check</a>.', default=False)
+    jobTitle= TextField('This will be the name we use to communicate about the request.',validators=[validators.Required(),validators.Length(min=2, max=50)])#,
+    emanio = BooleanField('Yes, I have looked at Context.', default=False)
     MHorSUD= RadioField('Is this MHS or SUD Services related?', choices=[('MHS','MHS'),('SUD','SUD Services')],coerce=unicode)
-    longDescription= TextAreaField('Describe what you want to investigate.',validators=[validators.Required() ])
-    keyQuestions= TextAreaField('What are the questions you want answered?', )
+    longDescription= TextAreaField('Describe what you want to investigate.',validators=[validators.Required(),validators.Length(min=2, max=120)])
+    keyQuestions= TextAreaField('What are the questions you want answered?',validators=[validators.Required(),validators.Length(min=2, max=120)])
     problem= TextAreaField('If the data shows a problem, describe your intervention or what data you might you need for that intervention')
     audience= TextAreaField('With whom or in what forum do you plan to share this data?',)
-    columnsRequired= TextAreaField('These are all the columns you will get in your report (chose <a href="//127.0.0.1:8080/long"> general form  </a>if you are unsure)<br> Be sure to include Agency/RUs needed, timeframe, special population, etc.,' )
+    columnsRequired= TextAreaField('These are all the columns you will get in your report (chose <a href="//127.0.0.1:8080/long"> general form  </a>if you are unsure)<br> Be sure to include Agency/RUs needed, time frame, special population, etc.,' )
     agency= TextField('For what Agencies do you want this data?', ) 
     ru = TextField("Leave blank if you want all RU's for Agency specified above",  ) 
     deadlinetime = SelectField(u'What Hour?',coerce=int, choices=[(8,'8 am'), (9, '9 am'), (10, '10 am'),
-        (11, '11 am'), (12, 'noon'), (13, '1 pm'), (14, '2 pm'), (15, '3 pm'), (16, '4 pm'), (17, '5 pm')])
+        (11, '11 am'), (12, 'Noon'), (13, '1 pm'), (14, '2 pm'), (15, '3 pm'), (16, '4 pm'), (17, '5 pm')])
     deadlinedate= DateField( '',  format='%m/%d/%Y',)
     deadlineWhy = TextField('Why?')
-    priority= RadioField('Priority', choices=[('1','Just Curious'),('2',''),('3','Medium'),('4',''),('5','Top Priority')],coerce=unicode,validators=[validators.Required()])
+    priority= RadioField('Priority', choices=[('1','1. Just Curious'),('2','2. Low Priority'),('3','3. Medium'),('4','4. Top Priority'),('5','5. Extremely Urgent')],coerce=unicode,validators=[validators.Required()])
     requestedBy= TextField("If this isn't your request, who is it for?") 
     # deliveryFormat= TextField('Format for Delivery', [validators.Required(),validators.Length(min=2, max=50)] ) 
     # start and end?
-    timeframe= TextField('From what timeframe do you want data? .e.g. Most recent fiscal year. Most recent calendar year. etc.',  ) 
+    timeframe= TextField('From what time frame do you want data? E.g., Most recent fiscal year? Most recent calendar year? Some other period?',  ) 
     timeframestart= DateField( '',  format='%m/%d/%Y',)
     timeframeend= DateField( '',  format='%m/%d/%Y',)
     timeBreakdown = TextField("If annual, specify Fiscal Year or Calendar.",  ) 
-    specialPop= TextField('Are you interested in any demographics (age, ethnicity) or Special Populations (Foster kids or dissabled adults, etc.)?',  ) 
+    specialPop= TextField('Are you interested in any demographics (age, ethnicity) or special populations (foster kids or disabled adults, and so on)?',  ) 
     typeOfService= TextField('Are there specific types of services you want? e.g. Crisis, Hospital, etc.', ) 
     specialInstructions= TextField('Any special instructions?',  ) 
     specialFacts= TextAreaField('Are there any facts or circumstances we should know to fulfill this request?') 
+    note = TextAreaField('Note',)
     submit=SubmitField('Submit')
 
 class Staff(Form):

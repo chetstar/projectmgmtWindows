@@ -1,7 +1,5 @@
 from app import app,models, db
-
-from flask import render_template, flash, redirect,Flask,Response,request,url_for, g,session,jsonify
-from forms import goal_form, strategy_form, project_form, task_form,DeleteRow_form,ldapA,LoginForm, Request, Which
+from forms import goal_form, strategy_form, project_form, task_form,DeleteRow_form,ldapA,LoginForm, Request, Which,Staff
 import datetime
 from sqlalchemy.orm.attributes import get_history
 from werkzeug import secure_filename
@@ -18,9 +16,10 @@ import socket
 from threading import Thread
 from flask.ext.login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 import ldap
-
+from flask import render_template, flash, redirect,Flask,Response,request,url_for, g,session,jsonify
 login_manager = LoginManager()
 login_manager.init_app(app) 
+
 # login_manager.session_protection = None
 #login_managerlogin_view = 'login'
 
@@ -52,6 +51,11 @@ login_manager.init_app(app)
 #   # import pdb;pdb.set_trace()
 #   x=models.User.query.filter_by(id=(id)).first() 
 #   return x
+@login_manager.unauthorized_handler
+def unauthorized():
+    print 'unauthorized'
+    flash("You must be logged in.")
+    return redirect(url_for("login"))
 
 @login_manager.user_loader
 def user_loader(user_id):
@@ -61,6 +65,7 @@ def user_loader(user_id):
     """
     g.user=current_user
     return models.User.query.get(user_id)
+
 
 
 @app.route("/logout")
@@ -88,11 +93,66 @@ def pickaform():
     return render_template("start.html",email=g.user.email,name=g.user.name,form=form,)
 
 
-@app.route("/requests",methods=["GET","POST"])
+# @app.route("/requests",methods=["GET","POST"])
+# @login_required
+# def requests():
+#     requestlist=models.Request.query.all()
+#     return render_template("requests.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+
+@app.route("/allrequest",methods=["GET","POST"])
 @login_required
-def requests():
-    requestlist=models.Request.query.all()
-    return render_template("requests.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+def allrequest():
+    requestlist= models.Request.query.all() 
+    # import pdb;pdb.set_trace()
+    return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+
+
+@app.route("/myrequest",methods=["GET","POST"])
+@login_required
+def myrequest():
+    requestlist= models.Request.query.filter_by(email=g.user.email).all() 
+    # import pdb;pdb.set_trace()
+    return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+
+@app.route('/viewrequest/<id>/', methods=['GET', 'POST'])
+@login_required
+def view_request(id):
+    request_to_edit=models.Request.query.filter_by(id=int(id)).first() 
+    form=Request(obj=request_to_edit)
+    # form.populate_obj(request_to_edit)
+    # import pdb;pdb.set_trace()
+    if request.method == 'POST':
+        # import pdb;pdb.set_trace()
+        request_to_edit.note=form.note.data
+        db.session.commit()
+        return redirect(url_for('allrequest'))
+    # if delete_form.validate_on_submit():
+    #     db.session.delete(ptask)
+    #     db.session.commit()
+    #     return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
+    return render_template('view_request.html',request_to_edit=request_to_edit ,name=g.user.name,form=form)
+
+
+
+@app.route('/edit_request/<id>/', methods=['GET', 'POST'])
+@login_required
+def edit_request(id):
+    request_to_edit=models.Request.query.filter_by(id=int(id)).first() 
+    form=Request(obj=request_to_edit)
+    # form.populate_obj(request_to_edit)
+    # import pdb;pdb.set_trace()
+    if request.method == 'POST':
+        # import pdb;pdb.set_trace()
+        request_to_edit.note=form.note.data
+        db.session.commit()
+        return redirect(url_for('myrequest'))
+    # if delete_form.validate_on_submit():
+    #     db.session.delete(ptask)
+    #     db.session.commit()
+    #     return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
+    return render_template('edit_request.html',request_to_edit=request_to_edit ,name=g.user.name,form=form)
+
+
 
 @app.route("/followup",methods=["GET","POST"])
 @login_required
@@ -137,12 +197,12 @@ def login():
             print "Authentification Successful"
             r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID','displayName'])
             email=r[0][1]['mail'][0]   
-            print email
+            # print email
             GUID=r[0][1]['objectGUID'][0]   
             FullName=r[0][1]['displayName'][0] 
             import uuid
             guid = uuid.UUID(bytes=GUID)
-            print form.remember_me.data
+            # print form.remember_me.data
             # g.user = current_user
             if not models.User.query.filter_by(email=unicode(email)).first(): 
               p=models.User(name=FullName,email=email)
@@ -153,7 +213,7 @@ def login():
             g.email=email
             session['logged_in'] = True
             # import pdb;pdb.set_trace()
-            return redirect(request.args.get("next") or url_for("pickaform"))
+            return redirect( url_for("pickaform"))
         except Exception as e:
             flash("Invalid Credentials.")
             return render_template("login.html", form=form)
@@ -177,7 +237,7 @@ def login():
 #                            title='Sign In',
 #                            form=form)
 
-
+# from flask import request
 
 @app.route('/navstart', methods=['GET','POST'])
 def navstart():
@@ -253,6 +313,7 @@ def flash_errors(form):
 
 @app.route('/start', methods=['GET','POST'])
 def start():
+    # from flask import request
     pform=project_form()
     P=models.Projects.query.all()
     q_sum = (db.session.query(
@@ -260,7 +321,8 @@ def start():
     func.sum(case([(Tasks.complete == True, 1)], else_=0)).label("x"),
     func.sum(case([(and_(Tasks.deadline != None, Tasks.completeDate != None, Tasks.deadline > Tasks.completeDate), 1)], else_=0)).label("y"),
     func.count(Tasks.id).label("total"),
-    ).outerjoin(Goals, Projects.goals).outerjoin(Strategies, Goals.strategies).outerjoin(Tasks, Strategies.tasks).group_by(Projects.id))  
+    ).outerjoin(Goals, Projects.goals).outerjoin(Strategies, Goals.strategies).outerjoin(Tasks, Strategies.tasks).group_by(Projects.id)) 
+    # import pdb;pdb.set_trace() 
     if request.method == 'POST':
         if pform.validate() == False:
             flash('Failed Field validation.')

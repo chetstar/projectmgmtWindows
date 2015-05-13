@@ -4,7 +4,7 @@ class Projects(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     projectleader = db.Column(db.String(35))    
-    goals = db.relationship('Goals', lazy='dynamic', backref='proj'
+    goals = db.relationship('Goals', lazy='dynamic', backref='proj',cascade="all, delete-orphan"
                                )
     def __repr__(self):
         return '<Project %r>' % (self.name)
@@ -13,7 +13,7 @@ class Goals(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     goal = db.Column(db.String(200))
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
-    strategies = db.relationship('Strategies',lazy='dynamic',order_by="Strategies.order", backref='goa')
+    strategies = db.relationship('Strategies',lazy='dynamic',order_by="Strategies.order", backref='goa',cascade="all, delete-orphan")
     order = db.Column(db.Integer)                                     
 
     def __repr__(self):
@@ -23,7 +23,7 @@ class Strategies(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     strategy = db.Column(db.String(200))
     goal_id = db.Column(db.Integer, db.ForeignKey('goals.id'))
-    tasks = db.relationship('Tasks', lazy='dynamic',order_by="Tasks.order",backref='strat')
+    tasks = db.relationship('Tasks', lazy='dynamic',order_by="Tasks.order",backref='strat',cascade="all, delete-orphan")
     order = db.Column(db.Integer)                            
     def __repr__(self):
         return '<Strategy %r>' % (self.strategy)
@@ -117,6 +117,7 @@ class Request(db.Model):
     timeframestart =db.Column(db.Date)
     timeframeend= db.Column(db.Date)
     note= db.Column(db.String(120), index=True)
+    Response= db.Column(db.String(120), index=True)
 
     def __repr__(self):
         return '<%r>' % (self.jobTitle)

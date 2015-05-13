@@ -5,7 +5,7 @@
 
 {% block content %}
     <div class="row ">
-    <div class="span2">  </div>  <div class="span8">
+    <div class="span2">  </div>  <div class="span5">
 <!--     {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>
@@ -15,22 +15,24 @@
     </ul>
   {% endif %}
 {% endwith %} -->
-  <h1>Hi {{name}} </h1>
+<div class="alert alert-warning" role="alert">
+  <h1>Hi {{name}} </h1></div>
 </div></div>
 
-
+</div></div>
 
         
-<div class="container">
-
-     <div class="well">
          <div class="row ">
+
+     <div class="span2">  </div> 
     <div class="span10">
+         <div class="well">
 <form method=post >   
 
      {{ form.hidden_tag() }}
-<h3>Have you verified your request is not in an existing <a href="http://covecontext/RunDashboard.i4?dashUUID=2e74cf96-b33b-4a7a-b53f-4310ce259dc6&primaryOrg=1&clientOrg=1">dashboard?</a></h3>
-<p>{{ wtf.form_field(form.emanio) }}</p> </div>
+        <h3>Have you verified your request is not in an existing dashboard?</h3> <h4>If not click <a href="http://covecontext/RunDashboard.i4?dashUUID=2e74cf96-b33b-4a7a-b53f-4310ce259dc6&primaryOrg=1&clientOrg=1">
+ here </a> for Context! Table of Contents.</h4>
+<p>{{ wtf.form_field(form.emanio) }}</p> 
    <div class="row ">
     <div class="span8">
 <h3>How do you want to refer to this request?</h3>
@@ -86,17 +88,17 @@
 <p>{{ wtf.form_field(form.timeframe) }}</p> 
  <div class="row ">
     <div class="span4">
-                 <label>           Timeframe Start
+                 <label>           Time frame Start
 
                         </label>
 <input data-provide="datepicker" data-date-format="mm/dd/yyyy" id="timeframestart"  type="text" value="{{ form.timeframestart.data }}" name="timeframestart" ></input>  </div><div class="span2.5"></div>
-                 <label>           Timeframe End
+                 <label>           Time frame End
 
                         </label>
 <input data-provide="datepicker" data-date-format="mm/dd/yyyy" id="timeframeend"  type="text" value="{{ form.timeframeend.data }}" name="timeframeend" ></input>  </div><div class="span1.5"></div></div></div><br>
   <div class="row ">
     <div class="span8">
-<strong>What's the smallest increment of time you want to see the data. e.g. month, quarterly or annually.</strong>
+<strong>What's the smallest increment of time you want to see the data. E.g., month, quarterly, or annually..</strong>
 <p>{{ wtf.form_field(form.timeBreakdown) }}</p> 
 
 <!-- <h3>{{ form.specialPop.label }}</h3> -->
