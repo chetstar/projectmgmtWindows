@@ -14,11 +14,11 @@ from email.mime.text import MIMEText
 import subprocess
 import socket
 from threading import Thread
-from flask.ext.login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
+# from flask.ext.login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 import ldap
 from flask import render_template, flash, redirect,Flask,Response,request,url_for, g,session,jsonify
-login_manager = LoginManager()
-login_manager.init_app(app) 
+# login_manager = LoginManager()
+# login_manager.init_app(app) 
 
 # login_manager.session_protection = None
 #login_managerlogin_view = 'login'
@@ -51,173 +51,173 @@ login_manager.init_app(app)
 #   # import pdb;pdb.set_trace()
 #   x=models.User.query.filter_by(id=(id)).first() 
 #   return x
-@login_manager.unauthorized_handler
-def unauthorized():
-    print 'unauthorized'
-    flash("You must be logged in.")
-    return redirect(url_for("login"))
+# @login_manager.unauthorized_handler
+# def unauthorized():
+#     print 'unauthorized'
+#     flash("You must be logged in.")
+#     return redirect(url_for("login"))
 
-@login_manager.user_loader
-def user_loader(user_id):
-    """Given *user_id*, return the associated User object.
+# @login_manager.user_loader
+# def user_loader(user_id):
+#     """Given *user_id*, return the associated User object.
 
-    :param unicode user_id: user_id (email) user to retrieve
-    """
-    g.user=current_user
-    return models.User.query.get(user_id)
+#     :param unicode user_id: user_id (email) user to retrieve
+#     """
+#     g.user=current_user
+#     return models.User.query.get(user_id)
 
 
 
-@app.route("/logout")
+# @app.route("/logout")
+# # @login_required
+# def logout():
+#     logout_user()
+#     session.pop('logged_in', None)
+#     flash("Logged Out.")
+#     # import pdb;pdb.set_trace()
+#     return redirect(url_for("login"))
+
+
+# @app.route("/pickaform",methods=["GET","POST"])
 # @login_required
-def logout():
-    logout_user()
-    session.pop('logged_in', None)
-    flash("Logged Out.")
-    # import pdb;pdb.set_trace()
-    return redirect(url_for("login"))
+# def pickaform():
+#     form = Which()
+#     if form.validate_on_submit():
+#         # import pdb;pdb.set_trace()
+#         print form.formtype.data
+#         if form.formtype.data==u"Short":
+#             WHICH=1
+#         else:
+#             WHICH=2
+#         return redirect(url_for("requestform",WHICH=WHICH))
+#     return render_template("start.html",email=g.user.email,name=g.user.name,form=form,)
 
 
-@app.route("/pickaform",methods=["GET","POST"])
-@login_required
-def pickaform():
-    form = Which()
-    if form.validate_on_submit():
-        # import pdb;pdb.set_trace()
-        print form.formtype.data
-        if form.formtype.data==u"Short":
-            WHICH=1
-        else:
-            WHICH=2
-        return redirect(url_for("requestform",WHICH=WHICH))
-    return render_template("start.html",email=g.user.email,name=g.user.name,form=form,)
+# # @app.route("/requests",methods=["GET","POST"])
+# # @login_required
+# # def requests():
+# #     requestlist=models.Request.query.all()
+# #     return render_template("requests.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
 
-
-# @app.route("/requests",methods=["GET","POST"])
+# @app.route("/allrequest",methods=["GET","POST"])
 # @login_required
-# def requests():
-#     requestlist=models.Request.query.all()
-#     return render_template("requests.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
-
-@app.route("/allrequest",methods=["GET","POST"])
-@login_required
-def allrequest():
-    requestlist= models.Request.query.all() 
-    # import pdb;pdb.set_trace()
-    return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+# def allrequest():
+#     requestlist= models.Request.query.all() 
+#     # import pdb;pdb.set_trace()
+#     return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
 
 
-@app.route("/myrequest",methods=["GET","POST"])
-@login_required
-def myrequest():
-    requestlist= models.Request.query.filter_by(email=g.user.email).all() 
-    # import pdb;pdb.set_trace()
-    return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+# @app.route("/myrequest",methods=["GET","POST"])
+# @login_required
+# def myrequest():
+#     requestlist= models.Request.query.filter_by(email=g.user.email).all() 
+#     # import pdb;pdb.set_trace()
+#     return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
 
-@app.route('/viewrequest/<id>/', methods=['GET', 'POST'])
-@login_required
-def view_request(id):
-    request_to_edit=models.Request.query.filter_by(id=int(id)).first() 
-    form=Request(obj=request_to_edit)
-    # form.populate_obj(request_to_edit)
-    # import pdb;pdb.set_trace()
-    if request.method == 'POST':
-        # import pdb;pdb.set_trace()
-        request_to_edit.note=form.note.data
-        db.session.commit()
-        return redirect(url_for('allrequest'))
-    # if delete_form.validate_on_submit():
-    #     db.session.delete(ptask)
-    #     db.session.commit()
-    #     return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
-    return render_template('view_request.html',request_to_edit=request_to_edit ,name=g.user.name,form=form)
+# @app.route('/viewrequest/<id>/', methods=['GET', 'POST'])
+# @login_required
+# def view_request(id):
+#     request_to_edit=models.Request.query.filter_by(id=int(id)).first() 
+#     form=Request(obj=request_to_edit)
+#     # form.populate_obj(request_to_edit)
+#     # import pdb;pdb.set_trace()
+#     if request.method == 'POST':
+#         # import pdb;pdb.set_trace()
+#         request_to_edit.note=form.note.data
+#         db.session.commit()
+#         return redirect(url_for('allrequest'))
+#     # if delete_form.validate_on_submit():
+#     #     db.session.delete(ptask)
+#     #     db.session.commit()
+#     #     return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
+#     return render_template('view_request.html',request_to_edit=request_to_edit ,name=g.user.name,form=form)
 
 
 
-@app.route('/edit_request/<id>/', methods=['GET', 'POST'])
-@login_required
-def edit_request(id):
-    request_to_edit=models.Request.query.filter_by(id=int(id)).first() 
-    form=Request(obj=request_to_edit)
-    # form.populate_obj(request_to_edit)
-    # import pdb;pdb.set_trace()
-    if request.method == 'POST':
-        # import pdb;pdb.set_trace()
-        request_to_edit.note=form.note.data
-        db.session.commit()
-        return redirect(url_for('myrequest'))
-    # if delete_form.validate_on_submit():
-    #     db.session.delete(ptask)
-    #     db.session.commit()
-    #     return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
-    return render_template('edit_request.html',request_to_edit=request_to_edit ,name=g.user.name,form=form)
+# @app.route('/edit_request/<id>/', methods=['GET', 'POST'])
+# @login_required
+# def edit_request(id):
+#     request_to_edit=models.Request.query.filter_by(id=int(id)).first() 
+#     form=Request(obj=request_to_edit)
+#     # form.populate_obj(request_to_edit)
+#     # import pdb;pdb.set_trace()
+#     if request.method == 'POST':
+#         # import pdb;pdb.set_trace()
+#         request_to_edit.note=form.note.data
+#         db.session.commit()
+#         return redirect(url_for('myrequest'))
+#     # if delete_form.validate_on_submit():
+#     #     db.session.delete(ptask)
+#     #     db.session.commit()
+#     #     return redirect(url_for('task_outline',name=name,goal=goal,strategy=strategy))
+#     return render_template('edit_request.html',request_to_edit=request_to_edit ,name=g.user.name,form=form)
 
 
 
-@app.route("/followup",methods=["GET","POST"])
-@login_required
-def followup():
-    # import pdb;pdb.set_trace()
-    requestlist= models.Request.query.filter_by(email=g.user.email).all() 
-    return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
+# @app.route("/followup",methods=["GET","POST"])
+# @login_required
+# def followup():
+#     # import pdb;pdb.set_trace()
+#     requestlist= models.Request.query.filter_by(email=g.user.email).all() 
+#     return render_template("followup.html",email=g.user.email,name=g.user.name,requestlist=requestlist)
 
     
-@app.route("/requestform/<WHICH>",methods=["GET","POST"])
-@login_required
-def requestform(WHICH):
-    form = Request()
-    # import pdb;pdb.set_trace()
-    if form.validate_on_submit():
-      print 'submit'
-      # import pdb;pdb.set_trace()
-      p=models.Request(email=g.user.email,username=g.user.name,jobTitle=form.jobTitle.data,deadlinedate=form.deadlinedate.data,emanio=form.emanio.data,MHorSUD=form.MHorSUD.data,
-        keyQuestions=form.keyQuestions.data, problem=form.problem.data,specialFacts=form.specialFacts.data,requestedBy=form.requestedBy.data, priority=form.priority.data,
-        timeframe=form.timeframe.data,timeBreakdown=form.timeBreakdown.data,specialPop=form.specialPop.data,agency=form.agency.data,ru=form.ru.data,
-         specialInstructions=form.specialInstructions.data, typeOfService=form.typeOfService.data, timeframestart=form.timeframestart.data, timeframeend=form.timeframeend.data, 
-         longDescription=form.longDescription.data, requestDate=datetime.datetime.utcnow(),
-         audience=form.audience.data,  columnsRequired=form.columnsRequired.data, deadlinetime=form.deadlinetime.data, deadlineWhy=form.deadlineWhy.data)
-      db.session.add(p)
-      db.session.commit()
-      return redirect(url_for('followup'))
-    else:
-        flash('validation fail')
-    if WHICH=='1':
-        print 'short!!'
-        return render_template("short.html",email=g.user.email,name=g.user.name,form=form)
-    else:
-        return render_template("long.html",email=g.user.email,name=g.user.name,form=form)
+# @app.route("/requestform/<WHICH>",methods=["GET","POST"])
+# @login_required
+# def requestform(WHICH):
+#     form = Request()
+#     # import pdb;pdb.set_trace()
+#     if form.validate_on_submit():
+#       print 'submit'
+#       # import pdb;pdb.set_trace()
+#       p=models.Request(email=g.user.email,username=g.user.name,jobTitle=form.jobTitle.data,deadlinedate=form.deadlinedate.data,emanio=form.emanio.data,MHorSUD=form.MHorSUD.data,
+#         keyQuestions=form.keyQuestions.data, problem=form.problem.data,specialFacts=form.specialFacts.data,requestedBy=form.requestedBy.data, priority=form.priority.data,
+#         timeframe=form.timeframe.data,timeBreakdown=form.timeBreakdown.data,specialPop=form.specialPop.data,agency=form.agency.data,ru=form.ru.data,
+#          specialInstructions=form.specialInstructions.data, typeOfService=form.typeOfService.data, timeframestart=form.timeframestart.data, timeframeend=form.timeframeend.data, 
+#          longDescription=form.longDescription.data, requestDate=datetime.datetime.utcnow(),
+#          audience=form.audience.data,  columnsRequired=form.columnsRequired.data, deadlinetime=form.deadlinetime.data, deadlineWhy=form.deadlineWhy.data)
+#       db.session.add(p)
+#       db.session.commit()
+#       return redirect(url_for('followup'))
+#     else:
+#         flash('validation fail')
+#     if WHICH=='1':
+#         print 'short!!'
+#         return render_template("short.html",email=g.user.email,name=g.user.name,form=form)
+#     else:
+#         return render_template("long.html",email=g.user.email,name=g.user.name,form=form)
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        try:
-            l = ldap.initialize("ldap://10.129.18.101")
-            l.simple_bind_s("program\%s" % form.username.data,form.password.data)
-            print "Authentification Successful"
-            r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID','displayName'])
-            email=r[0][1]['mail'][0]   
-            # print email
-            GUID=r[0][1]['objectGUID'][0]   
-            FullName=r[0][1]['displayName'][0] 
-            import uuid
-            guid = uuid.UUID(bytes=GUID)
-            # print form.remember_me.data
-            # g.user = current_user
-            if not models.User.query.filter_by(email=unicode(email)).first(): 
-              p=models.User(name=FullName,email=email)
-              db.session.add(p)
-              db.session.commit()            
-            login_user(user_loader(unicode(email)),remember=form.remember_me.data)
-            flash("Logged in successfully.")
-            g.email=email
-            session['logged_in'] = True
-            # import pdb;pdb.set_trace()
-            return redirect( url_for("pickaform"))
-        except Exception as e:
-            flash("Invalid Credentials.")
-            return render_template("login.html", form=form)
-    return render_template("login.html", form=form)
+# @app.route("/login", methods=["GET", "POST"])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         try:
+#             l = ldap.initialize("ldap://10.129.18.101")
+#             l.simple_bind_s("program\%s" % form.username.data,form.password.data)
+#             print "Authentification Successful"
+#             r=l.search_s('cn=Users,dc=BHCS,dc=Internal',ldap.SCOPE_SUBTREE,'(sAMAccountName=*%s*)' % form.username.data,['mail','objectGUID','displayName'])
+#             email=r[0][1]['mail'][0]   
+#             # print email
+#             GUID=r[0][1]['objectGUID'][0]   
+#             FullName=r[0][1]['displayName'][0] 
+#             import uuid
+#             guid = uuid.UUID(bytes=GUID)
+#             # print form.remember_me.data
+#             # g.user = current_user
+#             if not models.User.query.filter_by(email=unicode(email)).first(): 
+#               p=models.User(name=FullName,email=email)
+#               db.session.add(p)
+#               db.session.commit()            
+#             login_user(user_loader(unicode(email)),remember=form.remember_me.data)
+#             flash("Logged in successfully.")
+#             g.email=email
+#             session['logged_in'] = True
+#             # import pdb;pdb.set_trace()
+#             return redirect( url_for("pickaform"))
+#         except Exception as e:
+#             flash("Invalid Credentials.")
+#             return render_template("login.html", form=form)
+#     return render_template("login.html", form=form)
 # USERS.get('\x92\xbc\xe1\x9d\xf2\x03\x96K\x9d\xbb\xe7\x91\x1f\x07N\x86')
 # @app.route('/')
 # def index():

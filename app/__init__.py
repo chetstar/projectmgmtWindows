@@ -5,7 +5,7 @@ from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.login import LoginManager, UserMixin, login_required
+# from flask.ext.login import LoginManager, UserMixin, login_required
 
 import datetime
 class MyView(BaseView):
